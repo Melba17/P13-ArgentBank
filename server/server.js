@@ -1,3 +1,12 @@
+// Ce fichier configure et lance le serveur Express pour l'application.
+// - Il charge les variables d'environnement via `dotenv`.
+// - Il se connecte à la base de données en appelant la fonction `dbConnection`.
+// - Il configure CORS pour permettre des requêtes cross-origin avec `cors()`.
+// - Il ajoute des middlewares pour parser les données JSON et les URL-encoded.
+// - Il configure les routes d'API sous `/api/v1/user` en utilisant `userRoutes`.
+// - Il sert la documentation Swagger via `swagger-ui-express` si l'environnement n'est pas en production.
+// - Il définit une route de base (`/`) qui renvoie un message simple.
+// - Enfin, il lance le serveur sur un port spécifié (3001 par défaut).
 const express = require('express')
 const dotEnv = require('dotenv')
 const cors = require('cors')

@@ -1,3 +1,10 @@
+// Ce fichier contient le contrôleur pour la gestion des utilisateurs. Il définit plusieurs fonctions 
+// qui interagissent avec le service `userService` pour effectuer des actions sur les utilisateurs.
+// - `createUser`: Crée un nouvel utilisateur avec les données envoyées dans la requête.
+// - `loginUser`: Gère la connexion d'un utilisateur en vérifiant ses informations d'identification.
+// - `getUserProfile`: Récupère les données de profil de l'utilisateur actuel.
+// - `updateUserProfile`: Permet de mettre à jour les informations du profil utilisateur.
+// Chaque fonction gère les erreurs et renvoie une réponse appropriée avec un code de statut HTTP (200 ou 400). 
 const userService = require('../services/userService')
 
 module.exports.createUser = async (req, res) => {
