@@ -26,3 +26,7 @@ export const userSlice = createSlice({
   },
 });
 
+// Export de l'action setUser 
+export const { setUser, logout } = userSlice.actions; 
+
+export default userSlice.reducer; // Export du reducer pour l'utiliser dans le store

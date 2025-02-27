@@ -1,0 +1,133 @@
+.account {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid black;
+  background-color: #fff;
+  width: 80%;
+  margin: 0 auto;
+  flex-direction: column;
+  padding: 1.5rem;
+  box-sizing: border-box;
+  text-align: left;
+  margin-bottom: 2rem;
+}
+
+.account-amount {
+  margin: 0;
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+.account-amount-description {
+  margin: 0;
+}
+
+.account-title {
+  margin: 0;
+  padding: 0;
+  font-size: 1rem;
+  font-weight: normal;
+}
+
+.account-content-wrapper {
+  width: 100%;
+  flex: 1;
+}
+
+.welcome {
+  color: #fff;
+  font-size: 21px;
+  text-align: center; 
+  margin-bottom: 35px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+}
+
+.edit-button {
+  border-color: #00bc77;
+  background-color: #00bc77;
+  color: #fff;
+  font-weight: bold;
+  padding: 10px;
+}
+
+.edit-input {
+  font-size: 21px;
+  font-weight: bold;
+  border-radius: 5px;
+  padding: 8px;
+  margin: 5px;
+  margin-top: 10px;
+  text-align: center;
+  border: none;
+  width: 200px; 
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 10px; 
+  margin-top: -15px;
+  width: 100%; 
+}
+
+.save-button, .cancel-button {
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 5px;
+  padding: 8px 12px;
+  border: none;
+  cursor: pointer;
+  width: 100px; 
+  text-align: center;
+}
+
+.save-button {
+  background-color: #42b983;
+}
+.cancel-button {
+  background-color: #e74c3c;
+}
+
+.save-button:hover {
+  background-color: #2e8b57;
+}
+
+.cancel-button:hover {
+  background-color: #c0392b;
+}
+
+
+.header {
+  color: #fff;
+  margin-bottom: 2rem;
+}
+
+.transaction-button {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-top: 1rem;
+  border-color: #00bc77;
+  background-color: #00bc77;
+  color: #fff;
+}
+
+@media (min-width: 720px) {
+  .account {
+    flex-direction: row;
+  }
+
+  .account-content-wrapper.cta {
+    flex: 0;
+  }
+
+  .transaction-button {
+    width: 200px;
+  }
+}

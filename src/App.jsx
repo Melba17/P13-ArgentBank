@@ -1,20 +1,22 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import HomePage from './components/HomePage'; 
-import SignIn from './components/SignIn';  
-import UserProfile from './components/UserProfile'; 
+import Navbar from './components/navBar';
+import Home from './pages/home';
+import SignInForm from './pages/signInForm';
+import UserProfile from './pages/userProfile';
+import Footer from './components/footer';
 
-/////// ROUTAGE ///////
 function App() {
   return (
     <Router>
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/signin" element={<SignIn />} />
-      <Route path="/profile" element={<UserProfile />} />
-    </Routes>
-  </Router>
-      
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/sign-in" element={<SignInForm />} />
+        <Route path="/user" element={<UserProfile />} />
+      </Routes>
+      <Footer />
+    </Router>
   );
-};
+}
 
 export default App;
