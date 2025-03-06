@@ -1,5 +1,13 @@
 import './style.css';
 
+/**
+ * 🔹 Section principale de la page d'accueil.
+ * - Affiche le message promotionnel d'Argent Bank.
+ * - Met en avant les avantages tels que l'absence de frais et les taux d'intérêt élevés.
+ * 
+ * @component
+ * @returns {JSX.Element} - Composant de la section promotionnelle.
+ */
 function HeroSection() {
   return (
     <div className="hero">

@@ -1,0 +1,24 @@
+.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 70vh; 
+    color: #00bc77; 
+    font-size: 2.2rem;
+    font-weight: bold; 
+    text-align: center;
+}
+
+.loading p {
+    margin: 0;
+    animation: fadeIn 1.5s ease-in-out infinite; 
+}
+
+@keyframes fadeIn {
+    0%, 100% {
+        opacity: 0.4;
+    }
+    50% {
+        opacity: 1;
+    }
+}

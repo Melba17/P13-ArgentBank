@@ -1,18 +1,34 @@
-
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import UserHeader from '../../components/userHeader';
 import './style.css';
 
+/**
+ * 🔹 Page du profil utilisateur.
+ * - Redirige vers `/sign-in` si l'utilisateur n'est pas connecté.
+ * - Affiche les informations du profil et les comptes bancaires.
+ * 
+ * @component
+ * @returns {JSX.Element} - Page du profil utilisateur.
+ */
 function UserProfile() {
+  const { token } = useSelector((state) => state.user); // Déstructuration pour extraire uniquement le token
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!token && window.location.pathname !== '/') {
+      navigate('/sign-in');
+    }
+  }, [token, navigate]);
+
+  if (!token) return null; // Évite le rendu inutile avant la redirection
+
   return (
     <main className="main bg-dark">
-      <section className="welcome">
-        <h1>
-          Welcome back
-          <br />
-          {user.firstName || ''} {user.lastName || ''}!
-        </h1>
-        <button className="edit-button">Edit Name</button>
-      </section>
+      <UserHeader />
       <h2 className="sr-only">Accounts</h2>
+
       <section className="account">
         <div className="account-content-wrapper">
           <h3 className="account-title">Argent Bank Checking (x8349)</h3>
@@ -23,6 +39,7 @@ function UserProfile() {
           <button className="transaction-button">View transactions</button>
         </div>
       </section>
+
       <section className="account">
         <div className="account-content-wrapper">
           <h3 className="account-title">Argent Bank Savings (x6712)</h3>
@@ -33,6 +50,7 @@ function UserProfile() {
           <button className="transaction-button">View transactions</button>
         </div>
       </section>
+
       <section className="account">
         <div className="account-content-wrapper">
           <h3 className="account-title">Argent Bank Credit Card (x8349)</h3>
