@@ -6,10 +6,10 @@ Projet réalisé avec React et Vite
 
 Les utilisateurs peuvent se connecter à l’application en utilisant les identifiants suivants :
 
-  👤 Utilisateur          ✉️ Email           🔑 Mot de passe
-|---------------------|---------------------|------------------|
-| **Tony Stark**      | `tony@stark.com`    | `password123`    |
-| **Steve Rogers**    | `steve@rogers.com`  | `password456`    |
+|  👤 Utilisateur     |     ✉️ Email       |    🔑 Mot de passe |
+|---------------------|---------------------|---------------------|
+| **Tony Stark**      | `tony@stark.com`    | `password123`       |
+| **Steve Rogers**    | `steve@rogers.com`  | `password456`       |
 
 ---
 
