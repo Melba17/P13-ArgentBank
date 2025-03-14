@@ -22,7 +22,7 @@ function UserProfile() {
     }
   }, [token, navigate]);
 
-  if (!token) return null; // Évite le rendu inutile avant la redirection
+  if (!token) return null; // Évite le rendu inutile au moment de la redirection
 
   return (
     <main className="main bg-dark">

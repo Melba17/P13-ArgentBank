@@ -20,11 +20,14 @@ function UserHeader() {
   const [isEditing, setIsEditing] = useState(false);
   const [newFirstName, setNewFirstName] = useState(firstName);
   const [newLastName, setNewLastName] = useState(lastName);
+  const [error, setError] = useState('');
 
   // 🔹 Fonction pour sauvegarder les modifications
   async function handleSave() {
     try {
-      await updateUserProfile(newFirstName, newLastName); // 🔹 Met à jour sur l'API
+      setError('');
+      // 🔹 Met à jour sur l'API
+      await updateUserProfile(newFirstName, newLastName); 
 
       // 🔹 Récupérer les infos à jour après la mise à jour
       const updatedUser = await getUserProfile(); 
@@ -34,7 +37,7 @@ function UserHeader() {
 
       setIsEditing(false);
     } catch (error) {
-      console.error("Error updating user profile:", error);
+      setError(error.response?.data?.message || 'Une erreur est survenue. Veuillez réessayer.');
     }
   }
 
@@ -70,6 +73,7 @@ function UserHeader() {
       ) : (
         <button className="edit-button" onClick={() => setIsEditing(true)}>Edit Name</button>
       )}
+      {error && <p className="error-message">{error}</p>}
     </section>
   );
 }

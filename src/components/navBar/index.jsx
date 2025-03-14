@@ -22,10 +22,9 @@ function Navbar() {
   // Fonction pour gérer la déconnexion
 function handleLogout() {
   dispatch(logout()); // Réinitialise Redux
-  delete axios.defaults.headers.common["Authorization"]; // Supprime le token global d'Axios => Évite que d’anciennes requêtes utilisent un token périmé ; Permet un changement de compte sans recharger la page ; Redux et Axios sont bien synchronisés.
+  delete axios.defaults.headers.common["Authorization"]; // Supprime le token global d'Axios => Évite que les futures requêtes utilisent un token périmé ; Ainsi Redux et Axios sont bien synchronisés.
   navigate('/'); 
 }
-
 
   return (
     <nav className="main-nav">
@@ -37,7 +36,7 @@ function handleLogout() {
         {token ? (
           <>
             <Link className="main-nav-item" to="/user">
-              <i className="fa fa-user-circle"></i> {firstName}
+              <i className="fa fa-user-circle"></i> {firstName ? firstName : "Utilisateur"}
             </Link>
             <button className="main-nav-item logout-btn" onClick={handleLogout}>
               <i className="fa fa-sign-out"></i> Sign Out

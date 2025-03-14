@@ -16,7 +16,7 @@ export const loginUser = async (email, password) => {
   // 🔹 On stocke le token dans Axios pour les futures requêtes
   axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.body.token}`;
 
-  return response.data.body; // Retourne l'objet `body` qui contient le token 
+  return response.data.body; // 🔹 Retourne l'objet `body` qui contient le token 
 };
 
 /**

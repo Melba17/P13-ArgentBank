@@ -1,0 +1,229 @@
+# Informations générales de l'API 
+openapi: 3.0.3 # Norme/Version OpenAPI utilisée pour décrire l'API (structure  documentation)
+info:
+  title: Argent Bank Transactions API # Nom de l'API
+  description: API permettant de gérer les transactions bancaires d'un utilisateur.
+  version: 1.0.0 # Version actuelle de l'API
+
+servers: # Serveur sur lequel l’API fonctionne et pour savoir où envoyer les requêtes
+  - url: http://localhost:3001/api/v1
+    description: Serveur local de développement
+
+security: # Configuration de la sécurité pour protéger les endpoints
+  - BearerAuth: [] # L'authentification avec un token Bearer est requise, mais sans restriction de permissions (exemple: lecture et/ou écriture)
+
+tags: # Permet d’organiser les endpoints par catégories (facilite la navigation)
+  - name: transactions # Catégorie des transactions bancaires
+    description: Gestion des transactions bancaires des utilisateurs
+
+paths:
+  /transactions: # Endpoint de la route http://localhost:3001/api/v1
+    get: # Méthode utilisée
+      tags: # Cet endpoint appartient à la catégorie des transactions
+        - transactions
+      summary: Liste des transactions du mois en cours, groupées par compte
+      description: Retourne toutes les transactions de l'utilisateur pour le mois en cours, classées par compte.
+      security:
+        - BearerAuth: [] # Chaque requête nécessite un token d'authentification pour garantir la sécurité des transactions, car sinon sans ce token, l’API renvoie une erreur 401 (Non autorisé)
+      parameters: # Liste des paramètres que l'utilisateur peut envoyer dans la requête (ex: GET http://localhost:3001/api/v1/transactions?accountId=123456)
+        - name: accountId # Permet de filtrer par compte bancaire
+          in: query # Le paramètre est passé dans l'URL sous forme de query string.
+          required: false # Ce paramètre est optionnel (si non fourni, toutes les transactions seront retournées, l’API fonctionne quand même)
+          description: Filtrer les transactions par identifiant de compte bancaire.
+          schema:
+            type: string # Le accountId est une chaîne de caractères utilisé pour filtrer une liste / l'appel retourne les transactions uniquement pour le compte spécifié
+      responses: # Définit les codes de réponse de l'API possibles pour cette requête
+        '200':
+          description: Liste des transactions récupérée avec succès.
+          content:
+            application/json: # Réponse en JSON sous forme de tableau d'objets (items ou type déléments contenus dans ce tableau => transactions)
+              schema:
+                type: array
+                items: # Fait référence à ce qui est définit en exemple/modèle, en fin de fichier en utilisant $ref car évite de réécrire la structure complète ici
+                  $ref: '#/components/schemas/Transaction'
+        '401':
+          description: Non autorisé, token manquant ou invalide. # Accès refusé
+
+    post:
+      tags:
+        - transactions
+      summary: Ajouter une nouvelle transaction
+      description: Permet à l'utilisateur d'ajouter une nouvelle transaction à son compte bancaire.
+      security:
+        - BearerAuth: []
+      requestBody: # Indique que cet endpoint attend obligatoirement un corps de requête (body) lorsqu'un utilisateur ajoute une nouvelle transaction car on envoie des données
+        required: true
+        content:
+          application/json:
+            schema: # Indique que les données envoyées doivent suivre la structure du schéma Transaction
+              $ref: '#/components/schemas/Transaction'
+      responses:
+        '201':
+          description: Transaction ajoutée avec succès.
+          content: # Indique le type de données attendues en JSON
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Transaction'
+        '400': # Si le client n'envoie pas de données, l'API renverra une erreur
+          description: Mauvaise requête, données invalides.
+        '401':
+          description: Non autorisé.
+
+  /transactions/{transactionId}:
+    get:
+      tags:
+        - transactions
+      summary: Récupérer les détails d'une transaction spécifique
+      description: Retourne les informations détaillées d'une transaction spécifique d'un utilisateur.
+      security:
+        - BearerAuth: []
+      parameters: # (ex: GET http://localhost:3001/api/v1/transactions/123456)
+        - name: transactionId
+          in: path # Signifie que le paramètre transactionId doit être inclus directement dans l'URL de la requête, utilisé ici pour identifier une transaction précise, si absent, erreur 404 => donc nécessaire pour accéder à une ressource unique (exemple: GET /transactions/123456)
+          required: true
+          description: L'identifiant unique de la transaction à récupérer.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Détails de la transaction récupérés avec succès.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        '404':
+          description: Transaction non trouvée.
+        '401':
+          description: Non autorisé.
+
+    put:
+      tags:
+        - transactions
+      summary: Modifier une transaction (catégorie ou note)
+      description: Permet à l'utilisateur de modifier la catégorie d'une transaction via un menu déroulant, ou d'ajouter/modifier une note en saisissant un texte libre.
+      security:
+        - BearerAuth: []
+      parameters: #
+        - name: transactionId
+          in: path
+          required: true
+          description: L'identifiant unique de la transaction à modifier.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                category:
+                  type: string
+                  enum: ["Alimentation", "Transport", "Shopping", "Divertissement", "Factures", "Autre"] # Menu déroulant
+                  example: "Alimentation"
+                note:
+                  type: string
+                  nullable: true
+                  example: "Achat pour l'anniversaire de Paul."
+      responses:
+        '200':
+          description: Transaction mise à jour avec succès.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        '400':
+          description: Mauvaise requête, données invalides.
+        '404':
+          description: Transaction non trouvée.
+        '401':
+          description: Non autorisé.
+
+    delete:
+      tags:
+        - transactions
+      summary: Supprimer une transaction
+      description: Permet à l'utilisateur de supprimer une transaction de son historique.
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: transactionId
+          in: path
+          required: true
+          description: L'identifiant unique de la transaction à supprimer.
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Transaction supprimée avec succès.
+        '404':
+          description: Transaction non trouvée.
+        '401':
+          description: Non autorisé.
+
+  /transactions/{transactionId}/note:
+    delete:
+      tags:
+        - transactions
+      summary: Supprimer la note d'une transaction
+      description: Permet à l'utilisateur de supprimer uniquement la note associée à une transaction.
+      security:
+        - BearerAuth: []
+      parameters: # Cette requête supprimera uniquement la note de la transaction 123456, mais la transaction restera intacte (ex: DELETE http://localhost:3001/api/v1/transactions/123456/note)
+        - name: transactionId
+          in: path
+          required: true
+          description: L'identifiant unique de la transaction dont la note doit être supprimée.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Note supprimée avec succès.
+        '404':
+          description: Transaction non trouvée.
+        '401':
+          description: Non autorisé.
+
+components:
+  securitySchemes: # L'utilisateur doit envoyer un token Bearer (JWT) pour s'authentifier et sécuriser l'API
+    BearerAuth:
+      type: http
+      scheme: bearer 
+      bearerFormat: JWT
+
+  schemas: # Définit la structure des données que l'API envoie ou reçoit
+    Transaction:  
+      type: object
+      properties:
+        id: # Identifiant unique de la transaction
+          type: string
+          example: "txn_123456"
+        accountId: # identifiant unique du compte bancaire auquel appartient la transaction
+          type: string
+          example: "acc_987654"
+        date:
+          type: string
+          format: date-time
+          example: "2020-06-20T12:00:00Z"  # Temps universel
+        description:
+          type: string
+          example: "Golden Sun Bakery"
+        amount:
+          type: number
+          format: float  # Nombre à virgule flottante
+          example: 50.00
+        balance: # Solde restant sur le compte bancaire
+          type: number
+          format: float
+          example: 2187.79
+        type: # Mode de paiement
+          type: string
+          example: "Electronic"
+        category: # Catégorie de dépense
+          type: string
+          enum: ["Alimentation", "Transport", "Shopping", "Divertissement", "Factures", "Autre"] # Menu déroulant
+          example: "Alimentation"
+        note:
+          type: string
+          nullable: true  # Indique que la note peut être vide
+          example: ""  # Ex. transaction sans note (on pourrait ajouter "Achat de croissants" par exemple)

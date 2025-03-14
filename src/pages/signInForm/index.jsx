@@ -21,12 +21,14 @@ function SignInForm() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   async function handleSubmit(e) {
     e.preventDefault();
     setIsLoading(true);
+    setError('');
   
     try {
       // 🔹 Connexion et récupération du token
@@ -37,10 +39,10 @@ function SignInForm() {
   
       // 🔹 Stocker Redux avec toutes les infos du profil
       dispatch(setUser({ token, ...userProfile }));
-  
       navigate('/user'); 
+      
     } catch (error) {
-      setError(error.response?.data?.message || 'An error occurred. Please try again.');
+      setError(error.response?.data?.message || 'Une erreur est survenue. Veuillez réessayer.');
     } finally {
       setIsLoading(false);
     }
@@ -74,9 +76,9 @@ function SignInForm() {
               />
             </div>
             <div className="input-remember">
-            <input type="checkbox" id="remember-me" /><label htmlFor="remember-me"
-              >Remember me</label>
-          </div>
+              <input type="checkbox" id="remember-me" /><label htmlFor="remember-me"
+                >Remember me</label>
+            </div>
             {error && <p className="error-message">{error}</p>}
             <button className="sign-in-button" type="submit">Sign In</button>
           </form>

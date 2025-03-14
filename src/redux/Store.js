@@ -11,8 +11,7 @@ import userReducer from './userSlice';
 
 const store = configureStore({
   reducer: {
-    user: userReducer,  // Utilise le reducer du user => correspond à reducers dans userSlice.js
+    user: userReducer,  // Utilise le reducer du slice user => correspond à reducers dans userSlice.js
   },
 });
-
 export default store;
