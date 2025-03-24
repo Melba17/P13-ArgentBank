@@ -1,5 +1,5 @@
 # Informations générales de l'API 
-openapi: 3.0.3 # Norme/Version OpenAPI utilisée pour décrire l'API (structure  documentation)
+openapi: 3.0.3 # Norme/Version OpenAPI utilisée pour décrire l'API (structure / documentation)
 info:
   title: Argent Bank Transactions API # Nom de l'API
   description: API permettant de gérer les transactions bancaires d'un utilisateur.
@@ -21,45 +21,39 @@ paths:
     get: # Méthode utilisée
       tags: # Cet endpoint appartient à la catégorie des transactions
         - transactions
-      summary: Liste des transactions du mois en cours, groupées par compte
-      description: Retourne toutes les transactions de l'utilisateur pour le mois en cours, classées par compte si le paramètre `groupBy=account` est fourni.
+      summary: Liste des transactions du mois en cours (filtrées ou groupées).
+      description: >
+        Retourne toutes les transactions de l'utilisateur pour le mois en cours.    
+        - Si `groupBy=account` est fourni, les transactions sont groupées par compte dans la réponse.  
+        - Si `accountId=...` est fourni, seules les transactions de ce compte sont retournées.
+        Ces deux paramètres sont optionnels. 
       security:
-        - BearerAuth: [] # Chaque requête nécessite un token d'authentification pour garantir la sécurité des transactions, car sinon sans ce token, l’API renvoie une erreur 401 (Non autorisé)
-      parameters: # Liste des paramètres que l'utilisateur peut envoyer dans la requête (ex: GET http://localhost:3001/api/v1/transactions?accountId=123456)
+        - BearerAuth: [] # Chaque requête nécessite un token d'authentification pour garantir la sécurité des transactions, car sinon, l’API renvoie une erreur 401 (Non autorisé)
+      parameters: # Liste des paramètres que l'utilisateur peut envoyer dans la requête (ex: GET http://localhost:3001/api/v1/transactions?accountId=123456 ou GET http://localhost:3001/api/v1/transactions?groupBy=account)
         - name: groupBy # Permet de regrouper les transactions par compte
-          in: query
-          required: false
+          in: query # Le paramètre est passé dans l'URL sous forme de query string
+          required: false # Ce paramètre est optionnel 
           description: Si `groupBy=account` est fourni, les transactions seront retournées groupées par compte.
           schema:
             type: string
-            enum: ["compte"]
+            enum: ["account"]
 
         - name: accountId # Permet de filtrer par compte bancaire
-          in: query # Le paramètre est passé dans l'URL sous forme de query string.
-          required: false # Ce paramètre est optionnel 
+          in: query 
+          required: false 
           description: Filtrer les transactions par identifiant de compte bancaire.
           schema:
-            type: string # Le accountId est une chaîne de caractères utilisé pour filtrer une liste / l'appel retourne les transactions uniquement pour le compte spécifié
-      responses: # Définit les codes de réponse de l'API possibles pour cette requête
+            type: string 
+      responses: 
         '200':
-          description: Liste des transactions récupérée avec succès, groupées par compte si `groupBy=account` est fourni.
+          description: >
+            Liste des transactions récupérée avec succès.
+            - Si `groupBy=account` est utilisé, les transactions sont groupées par compte dans la clé `accounts`.  
+            - Si `accountId=...` est fourni, seules les transactions du compte sont retournées.  
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  accounts:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        accountId:
-                          type: string
-                          example: "acc_987654"
-                        transactions:
-                          type: array
-                          items:
-                            $ref: '#/components/schemas/Transaction'
+                $ref: '#/components/schemas/GroupedTransactionsResponse'               
         '401':
           description: Non autorisé, token manquant ou invalide. # Accès refusé
 
@@ -74,12 +68,12 @@ paths:
         required: true
         content:
           application/json:
-            schema: # Indique que les données envoyées doivent suivre la structure du schéma Transaction
-              $ref: '#/components/schemas/Transaction'
+            schema: # Indique que les données envoyées doivent suivre la structure du schéma NewTransaction
+              $ref: '#/components/schemas/NewTransaction'
       responses:
         '201':
           description: Transaction ajoutée avec succès.
-          content: # Indique le type de données attendues en JSON
+          content: # Indique le format attendu
             application/json:
               schema: 
                 $ref: '#/components/schemas/Transaction'
@@ -98,7 +92,7 @@ paths:
         - BearerAuth: []
       parameters: # (ex: GET http://localhost:3001/api/v1/transactions/123456)
         - name: transactionId
-          in: path # Signifie que le paramètre transactionId doit être inclus directement dans l'URL de la requête, utilisé ici pour identifier une transaction précise, si absent, erreur 404 => donc nécessaire pour accéder à une ressource unique (exemple: GET /transactions/123456)
+          in: path # Signifie que le paramètre transactionId doit être inclus directement dans l'URL de la requête, utilisé ici pour identifier une transaction précise, si absent, erreur 404 => donc nécessaire pour accéder à une ressource unique 
           required: true
           description: L'identifiant unique de la transaction à récupérer.
           schema:
@@ -211,6 +205,29 @@ components:
       bearerFormat: JWT
 
   schemas: # Définit la structure des données que l'API envoie ou reçoit
+    GroupedTransactionsResponse:
+      type: object
+      properties:
+        accounts:
+          type: array
+          items:
+            type: object
+            properties:
+              accountId:
+                type: string
+                example: "acc_987654"
+              transactions:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+    NewTransaction:
+      allOf:
+        - $ref: '#/components/schemas/Transaction'
+        - type: object
+          properties:
+            id:
+              type: string
+              readOnly: true # Indique que l'ID est généré par l'API et ne doit pas être envoyé par le client
     Transaction:  
       type: object
       properties:
