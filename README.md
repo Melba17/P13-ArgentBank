@@ -35,7 +35,7 @@ Un fichier **Swagger** (`transactions-api.yaml`) décrit les futurs endpoints po
 ## 📂 **Fichier Swagger**
 
 - **Fichier** : `transactions-api.yaml`
-- **Dossier** : `docs/`
+- **Dossier** : `swagger/`
 
 ### 📌 **Comment visualiser la documentation API ?**
 
