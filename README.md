@@ -21,9 +21,9 @@ Un fichier **Swagger** (`transactions-api.yaml`) décrit les futurs endpoints po
 
 | Méthode | Endpoint        | Description                                                              |
 |---------|-----------------|--------------------------------------------------------------------------|
-| **GET** | `/transactions` | *Récupérer les transactions du mois en cours (groupées par compte)*      |
+| **GET** | `/transactions` | *Récupérer les transactions du mois en cours (filtrées ou groupées).*      |
 | **POST**| `/transactions` | *Ajouter une nouvelle transaction*                                       |
-| **GET** | `/transactions/{transactionId}` | *Récupérer les détails d’une transaction*                |
+| **GET** | `/transactions/{transactionId}` | *Récupérer les détails d’une transaction dans une vue dédiée*                |
 | **PUT** | `/transactions/{transactionId}` | *Modifier la catégorie ou la note d’une transaction*     |
 | **DELETE**| `/transactions/{transactionId}` | *Supprimer une transaction*                            |
 | **DELETE**| `/transactions/{transactionId}/note` | *Supprimer uniquement la note d’une transaction*  |
