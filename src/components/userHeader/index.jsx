@@ -37,7 +37,7 @@ function UserHeader() {
 
       setIsEditing(false);
     } catch (error) {
-      setError(error.response?.data?.message || 'Une erreur est survenue. Veuillez réessayer.');
+      setError(error.response?.data?.message || 'An error has occurred. Please try again later.');
     }
   }
 
