@@ -7,12 +7,17 @@
 // - Il sert la documentation Swagger via `swagger-ui-express` si l'environnement n'est pas en production.
 // - Il définit une route de base (`/`) qui renvoie un message simple.
 // - Enfin, il lance le serveur sur un port spécifié (3001 par défaut).
+
+const path = require('path');
+
 const express = require('express')
 const dotEnv = require('dotenv')
 const cors = require('cors')
 const swaggerUi = require('swagger-ui-express')
 const yaml = require('yamljs')
-const swaggerDocs = yaml.load('./swagger.yaml')
+
+const swaggerDocs = yaml.load(path.join(__dirname, '..', 'swagger.yaml'));
+
 const dbConnection = require('./database/connection')
 
 dotEnv.config()
