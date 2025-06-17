@@ -29,7 +29,7 @@ async function populate() {
       axios
         .post(signupApi, user)
         .then(response => console.log('User added locally:', response.data))
-        .catch(error => console.error('Error locally:', error.response?.data || error.message));
+        .catch(error => console.error('Error locally:', error));
     });
   } else {
     // En production : insertion directe dans Atlas (donc hash)
