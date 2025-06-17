@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3001/api/v1/user';
+// 🔹 Utilise l'URL d'API définie dans les variables d'environnement (Vercel),
+// sinon utilise l'URL locale par défaut pour le développement en local.
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api/v1/user';
 
 /**
  * 🔹 Connexion de l'utilisateur
@@ -42,5 +44,3 @@ export const updateUserProfile = async (firstName, lastName) => {
   const response = await axios.put(`${API_URL}/profile`, { firstName, lastName });
   return response.data.body;
 };
-
-
