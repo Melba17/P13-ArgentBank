@@ -1,29 +1,55 @@
-// Ce fichier envoie des requêtes HTTP POST à l'API pour inscrire des utilisateurs.
-// Il utilise la bibliothèque `axios` pour faire des requêtes à l'URL de l'API `signupApi`.
-// Le tableau `users` contient les informations de plusieurs utilisateurs à inscrire.
-// La fonction `forEach` parcourt chaque utilisateur du tableau et envoie une requête POST à l'API pour chaque utilisateur.
-// Si l'inscription est réussie, la réponse est affichée dans la console, sinon une erreur est affichée.
-const axios = require('axios')
-const signupApi = 'http://localhost:3001/api/v1/user/signup'
+const axios = require('axios');
+const mongoose = require('mongoose');
+const User = require('../database/models/userModel');
+require('dotenv').config();
 
 const users = [
   {
     firstName: 'Tony',
     lastName: 'Stark',
     email: 'tony@stark.com',
-    password: 'password123'
+    password: 'password123',
   },
   {
     firstName: 'Steve',
     lastName: 'Rogers',
     email: 'steve@rogers.com',
-    password: 'password456'
-  }
-]
+    password: 'password456',
+  },
+];
 
-users.forEach(user => {
-  axios
-    .post(signupApi, user)
-    .then(response => console.log(response))
-    .catch(error => console.log(error))
-})
+// Détermine si on est en local (backend) ou production (Atlas)
+const isLocal = process.env.DATABASE_URL.includes('localhost');
+
+async function populate() {
+  if (isLocal) {
+    // En local : envoie les requêtes HTTP vers backend local
+    const signupApi = 'http://localhost:3001/api/v1/user/signup';
+    for (const user of users) {
+      try {
+        const response = await axios.post(signupApi, user);
+        console.log('User added locally:', response.data);
+      } catch (error) {
+        console.error('Error adding user locally:', error.response?.data || error.message);
+      }
+    }
+    process.exit(0);
+  } else {
+    // En prod (Atlas) : connecte-toi directement à la base et insère les utilisateurs
+    try {
+      await mongoose.connect(process.env.DATABASE_URL);
+      console.log('Connected to MongoDB Atlas');
+
+      await User.deleteMany({});
+      await User.insertMany(users);
+      console.log('Users inserted into Atlas');
+
+      process.exit(0);
+    } catch (error) {
+      console.error('Error populating Atlas:', error);
+      process.exit(1);
+    }
+  }
+}
+
+populate();

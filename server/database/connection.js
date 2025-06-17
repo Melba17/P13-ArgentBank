@@ -4,6 +4,8 @@
 // Si la connexion réussit, un message de succès est affiché dans la console.
 // En cas d'échec de la connexion, une erreur est capturée et un message d'erreur est affiché.
 const mongoose = require('mongoose')
+require('dotenv').config({ path: '.env.atlas' });
+
 const databaseUrl =
   process.env.DATABASE_URL || 'mongodb://localhost/argentBankDB'
 
