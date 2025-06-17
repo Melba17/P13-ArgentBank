@@ -1,7 +1,7 @@
 const axios = require('axios');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-const User = require('../server/database/models/userModel'); // adapte le chemin si besoin
+const User = require('../database/models/userModel');
 require('dotenv').config();
 
 const users = [
