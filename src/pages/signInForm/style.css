@@ -17,7 +17,7 @@
     box-sizing: border-box;
     background-color: white;
     width: 300px;
-    margin: 0 auto;
+    margin: 40px auto;
     padding: 2rem;
   }
   
@@ -54,3 +54,28 @@
     padding: 5px;
     font-size: 1.2rem;
   }
+
+  .test-users-info {
+  margin-top: -1.2rem;
+  margin-bottom: 0.5rem;
+  padding: 0.8rem 1rem;
+  font-size: 0.9rem;
+  color: #888;
+  font-style: italic;
+  user-select: text; /* pour pouvoir copier */
+}
+.test-users-info h3 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #bbb;
+}
+.test-users-info ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  font-weight: 600;
+}
+.test-users-info li {
+  margin-bottom: 0.3rem;
+}

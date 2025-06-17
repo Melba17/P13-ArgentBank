@@ -84,6 +84,14 @@ function SignInForm() {
           </form>
         </section>
       )}
+      {/* Bloc infos pour tester les différents utilisateurs */}
+          <div className="test-users-info" aria-label="Exemples de comptes de test">
+            <h3>Test Users</h3>
+            <ul>
+              <li>tony@stark.com |  password123</li>
+              <li>steve@rogers.com | password456</li>
+            </ul>
+          </div>
     </main>
   );
 };
