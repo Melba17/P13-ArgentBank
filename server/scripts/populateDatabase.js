@@ -21,6 +21,7 @@ const users = [
 
 const isLocal = process.env.DATABASE_URL.includes('localhost');
 
+
 async function populate() {
   if (isLocal) {
     const signupApi = 'http://localhost:3001/api/v1/user/signup';
@@ -40,27 +41,28 @@ async function populate() {
 }
     process.exit(0);
   } else {
-    try {
-      await mongoose.connect(process.env.DATABASE_URL);
-      console.log('Connected to MongoDB Atlas');
+  try {
+    await mongoose.connect(process.env.DATABASE_URL);
+    console.log('Connected to MongoDB Atlas');
 
-      await User.deleteMany({});
+    await User.deleteMany({});
 
-      const hashedUsers = [];
-      for (const user of users) {
-        const hashedPassword = await bcrypt.hash(user.password, 12);
-        hashedUsers.push({ ...user, password: hashedPassword });
-      }
-
-      await User.insertMany(hashedUsers);
-      console.log('Users inserted into Atlas');
-
-      process.exit(0);
-    } catch (error) {
-      console.error('Error in populate:', error);
-      process.exit(1);
+    // 🔐 Hachage des mots de passe AVANT insertion
+    const hashedUsers = [];
+    for (const user of users) {
+      const hashedPassword = await bcrypt.hash(user.password, 12);
+      hashedUsers.push({ ...user, password: hashedPassword });
     }
+
+    await User.insertMany(hashedUsers);
+    console.log('Users inserted into Atlas');
+
+    process.exit(0);
+  } catch (error) {
+    console.error('Error populating Atlas:', error);
+    process.exit(1);
   }
+}
 }
 
 populate();
