@@ -24,22 +24,26 @@ const isLocal = process.env.DATABASE_URL.includes('localhost');
 
 async function populate() {
   if (isLocal) {
-    const signupApi = 'http://localhost:3001/api/v1/user/signup';
-    for (const user of users) {
-  try {
-    const response = await axios.post(signupApi, user);
-    console.log('✅ User added locally:', response.data);
-  } catch (error) {
-    console.error('❌ Error adding user locally:');
-    if (error.response) {
-      console.error('Status:', error.response.status);
-      console.error('Data:', error.response.data);
-    } else {
-      console.error('Message:', error.message);
+  const signupApi = 'http://localhost:3001/api/v1/user/signup';
+  for (const user of users) {
+    try {
+      const response = await axios.post(signupApi, user, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      console.log('✅ User added locally:', response.data);
+    } catch (error) {
+      console.error('❌ Error adding user locally:');
+      if (error.response) {
+        console.error('Status:', error.response.status);
+        console.error('Data:', error.response.data);
+      } else {
+        console.error('Message:', error.message);
+      }
     }
   }
-}
-    process.exit(0);
+  process.exit(0);
   } else {
   try {
     await mongoose.connect(process.env.DATABASE_URL);
