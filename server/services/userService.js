@@ -67,7 +67,7 @@ module.exports.loginUser = async serviceData => {
     return { token }
   } catch (error) {
     console.error('Error in userService.js', error)
-    throw new Error(error)
+    throw error
   }
 }
 
