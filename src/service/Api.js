@@ -8,19 +8,38 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api/v1';
  * 🔹 Connexion de l'utilisateur
  */
 export const loginUser = async (email, password) => {
-  const response = await axios.post(
-    `${API_URL}/user/login`,
-    { email, password },
-    {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }
-  );
+  try {
+    const response = await axios.post(
+      `${API_URL}/user/login`,
+      { email, password },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
 
-  axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.body.token}`;
-  return response.data.body;
+    const token = response?.data?.body?.token;
+
+    if (!token) {
+      throw new Error('Token manquant dans la réponse');
+    }
+
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    return response.data.body;
+
+  } catch (error) {
+    console.error('❌ Erreur lors de la connexion :', error);
+
+    // Gestion spécifique pour les erreurs du backend
+    if (error.response) {
+      throw new Error(error.response.data.message || 'Erreur serveur');
+    } else {
+      throw new Error('Connexion impossible au serveur');
+    }
+  }
 };
+
 
 
 /**
