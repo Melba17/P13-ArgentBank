@@ -40,3 +40,14 @@ Un fichier **Swagger** (`transactions-api.yaml`) décrit les futurs endpoints po
 ### 📌 **Comment visualiser la documentation API ?**
 
 **Via Swagger Editor** : Ouvrir [Swagger Editor](https://editor.swagger.io/) et importer `transactions-api.yaml`.
+
+🎭 Mode Démo sans Backend (Mock)
+
+Pour la version déployée sur Vercel, l’application utilise un mock local simulant deux utilisateurs (<tony@stark.com> / <steve@rogers.com>) afin de fonctionner sans backend.
+Cela permet de tester la connexion, l'affichage et la modification du profil sans requêtes réseau.
+
+En local, l’application utilise le vrai backend Express.
+En production (sur Vercel), un mode "mock" est automatiquement activé grâce à la détection de l’environnement :
+
+const isDemo = import.meta.env.MODE === 'production';
+📁 Ce comportement est défini dans le fichier src/services/Api.js.
