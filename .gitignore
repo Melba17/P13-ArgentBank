@@ -35,14 +35,6 @@ config/runtime.yaml
 
 .DS_Store
 
-# Users Environment Variables
-.lock-wscript
-
-# Runtime configuration for swagger app
-config/runtime.yaml
-
-.DS_Store
-
 # Env files with secrets
 .env
 .env.*
