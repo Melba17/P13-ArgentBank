@@ -8,10 +8,20 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api/v1';
  * 🔹 Connexion de l'utilisateur
  */
 export const loginUser = async (email, password) => {
-  const response = await axios.post(`${API_URL}/user/login`, { email, password }); // ← Ajout /user
+  const response = await axios.post(
+    `${API_URL}/user/login`,
+    { email, password },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
   axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.body.token}`;
   return response.data.body;
 };
+
 
 /**
  * 🔹 Récupération du profil utilisateur
